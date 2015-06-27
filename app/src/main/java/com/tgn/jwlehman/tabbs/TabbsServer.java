@@ -7,6 +7,7 @@ package com.tgn.jwlehman.tabbs;
 
 import java.io.*;
 import java.net.*;
+
 public class TabbsServer extends Thread {
 
     private ServerSocket serverSocket;
@@ -30,6 +31,30 @@ public class TabbsServer extends Thread {
         serverSocket = new ServerSocket(0);
         System.out.println("Server is boud to port " + serverSocket.getLocalPort());
         serverSocket.setReuseAddress(true);
+    }
+
+    public void run() {
+        while(true) {
+            try {
+                System.out.println("Waiting for client...");
+                Socket server = new serverSocket.accept();
+                System.out.println("Connected to server " + server.getLocalSocketAddress());
+                DataInputStream in = new DataInputStream(server.getInputStream());
+                System.out.println(in.readUTF());
+                DataOutputStream out = new DataOutputStream(server.getOutputStream());
+                out.writeUTF("Welcome to the SafeWalk Server...");
+                server.close();
+            }
+            catch(SocketTimeoutException ste) {
+                ste.printStackTrace();
+                break;
+            }
+            catch(IOException ie) {
+                ie.printStackTrace();
+                break;
+            }
+
+        }
     }
 
 
